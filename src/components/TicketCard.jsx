@@ -2,12 +2,24 @@ import PriorityDisplay from './PriorityDisplay'
 import ProgressDisplay from './ProgressDisplay'
 import StatusDisplay from './StatusDisplay'
 import AvatarDisplay from './AvatarDisplay'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import DeleteBlock from './DeleteBlock'
+import { useContext } from 'react'
+import { EditModeContext, EditTicketContext } from '../Context'
 
 export default function TicketCard({ color, ticket }) {
+  const navigate = useNavigate()
+  const { editMode, setEditMode } = useContext(EditModeContext)
+  const { ticketForEdit, setTicketForEdit } = useContext(EditTicketContext)
+
+  function gotoTicketPage(ticket) {
+    setEditMode(true)
+    setTicketForEdit(ticket)
+    navigate(`/ticket/:${ticket.id}`)
+  }
+  
   return (
-    <div className="ticket-card">
+    <div onClick={() => gotoTicketPage(ticket)} className="ticket-card">
       <div className="ticket-color" style={{ backgroundColor: color }}></div>
       <Link to="/" id="link">
         <h3>{ticket.title}</h3>

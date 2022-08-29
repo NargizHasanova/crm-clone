@@ -1,23 +1,34 @@
-import { useState, useEffect, useContext } from 'react'
+import axios from 'axios'
+import { useState, useContext } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { EditModeContext, EditTicketContext } from '../Context'
 import { uniqueCategories } from '../dummy-data'
-// import { useNavigate, useParams } from 'react-router-dom'
-// import axios from 'axios'
-// import CategoriesContext from '../context'
+import Slider from '@mui/material/Slider'
+import Box from '@mui/material/Box'
+import Rating from '@mui/material/Rating'
+import Typography from '@mui/material/Typography'
 
-const TicketPage = ({ editMode }) => {
+export default function TicketPage() {
+  const navigate = useNavigate()
+  const { editMode, setEditMode } = useContext(EditModeContext)
+  const { ticketForEdit, setTicketForEdit } = useContext(EditTicketContext)
   const [formData, setFormData] = useState({
-    title: '',
-    description: '',
-    category: 'Q2 2022',
-    owner: '',
-    status: 'not started',
-    progress: 0,
-    timestamp: new Date().toISOString(),
+    id: Date.now(),
+    title: editMode ? ticketForEdit.title : '',
+    description: editMode ? ticketForEdit.description : '',
+    category: editMode ? ticketForEdit.category : 'Q2 2022',
+    progress: editMode ? ticketForEdit.progress : '',
+    priority: editMode ? ticketForEdit.priority : 1,
+    avatar: editMode ? ticketForEdit.avatar : '',
+    owner: editMode ? ticketForEdit.owner : '',
+    status: editMode ? ticketForEdit.status : 'not started',
+    timestamp: new Date().toISOString(), // bu ne meqsed ucun yazilib bilmirem
   })
-  console.log(formData.title)
 
-  function handleSubmit() {
-    console.log('submit')
+  console.log(formData.status)
+
+  async function handleSubmit(e) {
+    e.preventDefault()
   }
 
   function handleChange(e) {
@@ -46,117 +57,45 @@ const TicketPage = ({ editMode }) => {
             />
 
             <label htmlFor="description">Description</label>
-            <input
-              id="description"
-              name="description"
-              type="text"
-              required={true}
+            <textarea
               value={formData.description}
               onChange={handleChange}
-            />
-
-            <label>Category</label>
-            <select
-              name="category"
-              value={formData.category}
-              onChange={handleChange}
-            >
-              {uniqueCategories?.map((category, index) => (
-                <option key={index}>{category}</option>
-              ))}
-            </select>
-
-            <label htmlFor="new-category">New Category</label>
-            <input
-              id="new-category"
-              name="category"
-              type="text"
-              value={formData.category}
-              onChange={handleChange}
-            />
-
-            <label>Priority</label>
-            <div className="multiple-input-container">
-              <label htmlFor="priority-1">1</label>
-              <input
-                id="priority-1"
-                name="priority"
-                type="radio"
-                checked={formData.priority === 1}
-                value={1}
-                onChange={handleChange}
-              />
-
-              <label htmlFor="priority-2">2</label>
-              <input
-                id="priority-2"
-                name="priority"
-                type="radio"
-                checked={formData.priority === 2}
-                onChange={handleChange}
-              />
-              <label htmlFor="priority-3">3</label>
-              <input
-                id="priority-3"
-                name="priority"
-                type="radio"
-                checked={formData.priority === 3}
-                onChange={handleChange}
-              />
-              <label htmlFor="priority-4">4</label>
-              <input
-                id="priority-4"
-                name="priority"
-                type="radio"
-                checked={formData.priority === 4}
-                onChange={handleChange}
-              />
-              <label htmlFor="priority-5">5</label>
-              <input
-                id="priority-5"
-                name="priority"
-                type="radio"
-                checked={formData.priority === 5}
-                onChange={handleChange}
-              />
-            </div>
+              name="description"
+              id="description"
+              cols="30"
+              rows="10"
+            ></textarea>
 
             {editMode && (
               <>
-                <label htmlFor="progress">Progress</label>
-                <input
-                  type="range"
-                  id="progress"
-                  name="progress"
-                  min="0"
-                  max="100"
-                />
+                <label htmlFor="progress">
+                  Progress( {formData.progress}% )
+                </label>
+                <Box>
+                  <Slider
+                    value={formData.progress}
+                    aria-label="Default"
+                    valueLabelDisplay="auto"
+                    name="progress"
+                    onChange={handleChange}
+                  />
+                </Box>
 
                 <label>Status</label>
-                <select name="status">
-                  <option value="done" selected={formData.status === 'done'}>
-                    Done
-                  </option>
-                  <option
-                    value="working on it"
-                    selected={formData.status === 'working on it'}
-                  >
-                    Working on it
-                  </option>
-                  <option value="stuck" selected={formData.status === 'stuck'}>
-                    Stuck
-                  </option>
-                  <option
-                    value="not started"
-                    selected={formData.status === 'not started'}
-                  >
-                    Not Started
-                  </option>
+                <select
+                  name="status"
+                  onChange={handleChange}
+                  defaultValue={formData.status}
+                >
+                  <option value="done">Done</option>
+                  <option value="working on it">Working on it</option>
+                  <option value="stuck">Stuck</option>
+                  <option value="not started">Not Started</option>
                 </select>
               </>
             )}
 
-            <input type="submit" />
+            <input className="submit-btn" type="submit" />
           </section>
 
           <section>
@@ -170,6 +109,27 @@ const TicketPage = ({ editMode }) => {
               value={formData.owner}
             />
 
+            <Box sx={{ '& > legend': { mt: 2 } }}>
+              <Typography component="legend">Priority</Typography>
+              <Rating
+                value={formData.priority}
+                onChange={(event, newValue) => {
+                  setFormData((prev) => ({ ...prev, priority: newValue }))
+                }}
+              />
+            </Box>
+
+            <label>Category</label>
+            <select
+              name="category"
+              value={formData.category}
+              onChange={handleChange}
+            >
+              {uniqueCategories?.map((category, index) => (
+                <option key={index}>{category}</option>
+              ))}
+            </select>
+
             <label htmlFor="avatar">Avatar</label>
             <input
               id="avatar"
@@ -178,9 +138,7 @@ const TicketPage = ({ editMode }) => {
               onChange={handleChange}
             />
             <div className="img-preview">
-              {!formData.avatar && (
-                <img src={formData.avatar} alt="image preview" />
-              )}
+              <img src={formData.avatar} alt="image preview" />
             </div>
           </section>
         </form>
@@ -188,5 +146,3 @@ const TicketPage = ({ editMode }) => {
     </div>
   )
 }
-
-export default TicketPage

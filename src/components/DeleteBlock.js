@@ -9,6 +9,7 @@ const DeleteBlock = ({ documentId }) => {
   // }
   function deleteTicket() {
     console.log('delete');
+    // burda stoppropagation istifade ele gor cunki delete basanda editpage-e yoneldir
   }
 
 

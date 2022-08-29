@@ -37,6 +37,11 @@ nav .logo-container img {
     width: 20px;
 }
 
+.controls-container .icon {
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
 nav .icon {
     color: rgb(255, 255, 255);
 }
@@ -59,10 +64,25 @@ nav .icon {
     width: 100%
 }
 
+.ticket-card:hover #link>* {
+    background-color: rgb(233, 233, 233) !important;
+}
+
+.submit-btn:hover {
+    cursor: pointer;
+    background-color: rgb(184, 184, 184);
+}
+
+.submit-btn {
+    margin-top: 20px !important;
+    border: none;
+}
+
 .ticket-card #link {
     display: flex;
     width: 100%;
 }
+
 
 .ticket-card #link>* {
     background-color: rgb(221, 221, 221);
@@ -72,7 +92,6 @@ nav .icon {
     display: flex;
     align-items: center;
 }
-
 
 .ticket-card .ticket-color {
     width: 15px;
@@ -191,6 +210,10 @@ select {
     border-radius: 10px;
     border: 1.5px solid rgb(218, 218, 218);
     margin: 5px;
+}
+
+.ticket form input {
+    margin: 0;
 }
 
 .ticket form .multiple-input-container {

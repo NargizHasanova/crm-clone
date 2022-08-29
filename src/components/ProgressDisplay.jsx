@@ -7,6 +7,7 @@ const ProgressDisplay = ({ progress }) => {
           className="progress-indicator"
         ></div>
       </div>
+      <h3>{progress}%</h3>
     </div>
   )
 }
