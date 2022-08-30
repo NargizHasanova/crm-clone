@@ -22,7 +22,9 @@ const Nav = () => {
         <img src={logo} alt="logo" />
       </div>
       <div className="controls-container">
-        <div onClick={goToCreateTicketPage} className="icon" >➕</div>
+        {window.location.href === 'http://localhost:3000/'
+          && <div onClick={goToCreateTicketPage} className="icon" >➕</div>}
+
         <div className="icon">❮❮</div>
       </div>
     </nav>

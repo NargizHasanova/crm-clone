@@ -1,9 +1,12 @@
 import { useNavigate } from 'react-router-dom'
 import { tickets, uniqueCategories } from '../dummy-data'
 import TicketCard from '../components/TicketCard'
+import { useContext } from 'react'
+import { DataContext } from '../Context'
 
 
 export default function Dashboard() {
+  const { getData, setGetData } = useContext(DataContext)
   const colors = [
     'rgb(255,179,186)',
     'rgb(255,223,186)',
@@ -20,7 +23,7 @@ export default function Dashboard() {
           uniqueCategories?.map((uniqueCategory, categoryIndex) => (
             <div key={categoryIndex}>
               <h3>{uniqueCategory}</h3>
-              {tickets
+              {getData
                 .filter((ticket) => ticket.category === uniqueCategory)
                 .map((filteredTicket, _index) => (
                   <TicketCard

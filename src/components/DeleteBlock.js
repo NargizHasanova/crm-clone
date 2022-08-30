@@ -1,23 +1,22 @@
-import axios from 'axios'
+import { useContext } from "react";
+import { DataContext } from "../Context";
 
-const DeleteBlock = ({ documentId }) => {
+const DeleteBlock = ({ ticket }) => {
+  const { getData, setGetData } = useContext(DataContext)
 
-  // const deleteTicket = async () => {
-  //   const response = await axios.delete(`http://localhost:8000/tickets/${documentId}`)
-  //   const success = response.status == 200
-  //   if (success) window.location.reload()
-  // }
-  function deleteTicket() {
+  function deleteTicket(e, id) {
+    e.stopPropagation()
     console.log('delete');
-    // burda stoppropagation istifade ele gor cunki delete basanda editpage-e yoneldir
+    const filtered = getData.filter(item => item.id !== id)
+    setGetData(filtered)
   }
 
 
   return (
     <div className="delete-block">
-      <div className="delete-icon" onClick={deleteTicket}>❌</div>
+      <div className="delete-icon" onClick={(e) => deleteTicket(e, ticket.id)}>❌</div>
     </div>
-  )  
+  )
 }
 
 export default DeleteBlock

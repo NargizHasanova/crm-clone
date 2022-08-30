@@ -12,14 +12,15 @@ export default function TicketCard({ color, ticket }) {
   const { editMode, setEditMode } = useContext(EditModeContext)
   const { ticketForEdit, setTicketForEdit } = useContext(EditTicketContext)
 
-  function gotoTicketPage(ticket) {
+  function gotoTicketPage() {
+    console.log(ticket)
     setEditMode(true)
     setTicketForEdit(ticket)
     navigate(`/ticket/:${ticket.id}`)
   }
-  
+
   return (
-    <div onClick={() => gotoTicketPage(ticket)} className="ticket-card">
+    <div onClick={gotoTicketPage} className="ticket-card">
       <div className="ticket-color" style={{ backgroundColor: color }}></div>
       <Link to="/" id="link">
         <h3>{ticket.title}</h3>
@@ -28,7 +29,7 @@ export default function TicketCard({ color, ticket }) {
         <PriorityDisplay priority={Number(ticket.priority)} />
         <ProgressDisplay progress={Number(ticket.progress)} />
       </Link>
-      <DeleteBlock />
+      <DeleteBlock ticket={ticket} />
     </div>
   )
 }

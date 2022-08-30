@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { useState, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { EditModeContext, EditTicketContext } from '../Context'
+import { EditModeContext, EditTicketContext, DataContext } from '../Context'
 import { uniqueCategories } from '../dummy-data'
 import Slider from '@mui/material/Slider'
 import Box from '@mui/material/Box'
@@ -12,23 +12,47 @@ export default function TicketPage() {
   const navigate = useNavigate()
   const { editMode, setEditMode } = useContext(EditModeContext)
   const { ticketForEdit, setTicketForEdit } = useContext(EditTicketContext)
+  const { getData, setGetData } = useContext(DataContext)
+
   const [formData, setFormData] = useState({
     id: Date.now(),
     title: editMode ? ticketForEdit.title : '',
     description: editMode ? ticketForEdit.description : '',
     category: editMode ? ticketForEdit.category : 'Q2 2022',
-    progress: editMode ? ticketForEdit.progress : '',
+    progress: editMode ? ticketForEdit.progress : 0,
     priority: editMode ? ticketForEdit.priority : 1,
     avatar: editMode ? ticketForEdit.avatar : '',
     owner: editMode ? ticketForEdit.owner : '',
     status: editMode ? ticketForEdit.status : 'not started',
-    timestamp: new Date().toISOString(), // bu ne meqsed ucun yazilib bilmirem
+    timestamp: new Date().toISOString(),
   })
-
-  console.log(formData.status)
 
   async function handleSubmit(e) {
     e.preventDefault()
+    if (!editMode) {
+      setGetData((prev) => [...prev, formData])
+      navigate('/')
+    } else {
+      setGetData(
+        getData.map((item) => {
+          if (item.id === ticketForEdit.id) {
+            item.title = formData.title
+            item.description = formData.description
+            item.category = formData.category
+            item.progress = formData.progress
+            item.priority = formData.priority
+            item.avatar = formData.avatar
+            item.owner = formData.owner
+            item.status = formData.status
+            item.timestamp = new Date().toISOString()
+          }
+          return item
+        }),
+        navigate('/')
+      )
+    }
+
+    // alert(user succesfully updated/added)
   }
 
   function handleChange(e) {
@@ -95,7 +119,13 @@ export default function TicketPage() {
               </>
             )}
 
-            <input className="submit-btn" type="submit" />
+            <button
+              onSubmit={handleSubmit}
+              className="submit-btn"
+              type="submit"
+            >
+              {editMode ? 'update' : 'create'}
+            </button>
           </section>
 
           <section>

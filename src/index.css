@@ -76,6 +76,11 @@ nav .icon {
 .submit-btn {
     margin-top: 20px !important;
     border: none;
+    border-radius: 5px;
+    padding: 15px 0px;
+    font-size: 17px;
+    font-weight: 600;
+    color: #4C389B;
 }
 
 .ticket-card #link {

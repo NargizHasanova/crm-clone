@@ -1,4 +1,5 @@
 import { createContext, useState } from "react"
+import { tickets } from "./dummy-data"
 
 export const DataContext = createContext()
 export const EditModeContext = createContext()
@@ -6,7 +7,7 @@ export const EditTicketContext = createContext()
 
 
 export default function Context({ children }) {
-    const [getData, setGetData] = useState([])
+    const [getData, setGetData] = useState(tickets) 
     const [editMode, setEditMode] = useState(undefined)
     const [ticketForEdit, setTicketForEdit] = useState({})
     return (

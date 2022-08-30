@@ -101,3 +101,4 @@ export const tickets = [
 
 
 export const uniqueCategories = [...new Set(tickets.map(({ category }) => category))]
+// ['Q1 2022', 'Q2 2022', 'Q3 2022']
